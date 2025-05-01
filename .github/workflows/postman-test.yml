@@ -2,8 +2,7 @@ name: Run Postman Collection with Newman
 
 on:
   schedule:
-    - cron: '30 1 * * *'  # 22:30 hora Argentina
-    - cron: '45 1 * * *'  # 22:45 hora Argentina
+    - cron: '15 15 * * *'  # 18:15 hora Argentina
   push:
     branches: [main]  # Cambiá si usás otra ra
   pull_request:
