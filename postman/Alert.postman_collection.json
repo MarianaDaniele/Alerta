@@ -1,1 +1,35 @@
-{}
+{
+	"info": {
+		"_postman_id": "ada1e046-5999-47b9-a6eb-55e378b5ede1",
+		"name": "Alert",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "43224218",
+		"_collection_link": "https://www.postman.com/platform-api-team-7844/workspace/api-test-automation-with-postman/collection/43224218-ada1e046-5999-47b9-a6eb-55e378b5ede1?action=share&source=collection_link&creator=43224218"
+	},
+	"item": [
+		{
+			"name": "Lanzar",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://hooks.zapier.com/hooks/catch/22670095/2puks8m/",
+					"protocol": "https",
+					"host": [
+						"hooks",
+						"zapier",
+						"com"
+					],
+					"path": [
+						"hooks",
+						"catch",
+						"22670095",
+						"2puks8m",
+						""
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
