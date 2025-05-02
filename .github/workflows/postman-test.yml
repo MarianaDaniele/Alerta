@@ -1,11 +1,7 @@
 name: Run Postman Collection with Newman
 
 on:
-  schedule:
-    - cron: '*/5 * * * *'  # 18:15 hora Argentina
-  push:
-    branches: [main]  # Cambiá si usás otra ra
-  pull_request:
+  workflow_dispatch:  # Este es el activador manual
 
 jobs:
   run-postman-tests:
