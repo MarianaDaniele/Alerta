@@ -1,35 +1,200 @@
 {
 	"info": {
-		"_postman_id": "ada1e046-5999-47b9-a6eb-55e378b5ede1",
-		"name": "Alert",
+		"_postman_id": "8e98b44a-03bd-4c83-9289-adb18517b144",
+		"name": "Tomorrow",
+		"description": "## Tomorrow.io Weather API\n\nThe [Tomorrow.io](http://tomorrow.io/) Weather API offers fast, reliable, and hyper-accurate weather data with the most cutting-edge interfaces—the perfect solution for powering weather-dependent features on your websites or application. Learn more at [www.tomorrow.io/weather-api](http://www.tomorrow.io/weather-api)\n\nEndFragment\n\n## Documentation\n\nIf you are looking for a more in-depth guide and reference for the Tomorrow.io API, please refer to the [Tomorrow.io API documentation](https://docs.tomorrow.io/reference).\n\n## Getting started with Tomorrow.io Postman collection\n\n1. [Sign up](https://app.tomorrow.io/signup?planid=60d46beae90c3b3549a59ff3) with Tomorrow.io to get a set of API keys that are required for interacting with the API.\n2. Import Tomorrow.io Postman Collection to your workspace.\n3. Add your apikey that you grabbed from our Tomorrow.io Development Section to the envrioment variables.\n4. Change the query/path/body parameters by going to the \"Pre-request Script\" tab and modifying them.\n5. Click \"Send\".\n    \n\n## Collection APIs\n\n- Weather Forecast\n- Realtime Weather\n- Weather Recent History\n- Weather Timeline\n- Weather Tiles\n- Historical Weather\n- Climate\n- Route\n- Events\n- Locations\n- Insights\n- Alerts\n- Testers\n    \n\n## Useful Tools\n\n[JSON to CSV](https://json-csv.com/) can be used to transform a timeline to an CSV - just make sure to flatten the values before using the one-liner js code below and change RESPONSE to the one you got from our API.\n\n[Plotly Chart Studio](https://plotly.com/chart-studio/) can be used to plot the data points. Simply convert a response to .csv (as mentioned above), import, inspect and share.\n\n[Webhook Tester](https://webhook.site/) can be used for receiving webhook calls. Generate a webhook url on this site and use that url in the developers section to get alert notifications.\n\n## Contribute\n\nYou can contribute to this project by forking the collection and submit a PR.",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "43224218",
-		"_collection_link": "https://www.postman.com/platform-api-team-7844/workspace/api-test-automation-with-postman/collection/43224218-ada1e046-5999-47b9-a6eb-55e378b5ede1?action=share&source=collection_link&creator=43224218"
+		"_collection_link": "https://www.postman.com/platform-api-team-7844/workspace/api-test-automation-with-postman/collection/43224218-8e98b44a-03bd-4c83-9289-adb18517b144?action=share&source=collection_link&creator=43224218"
 	},
 	"item": [
 		{
-			"name": "Lanzar",
-			"request": {
-				"method": "POST",
-				"header": [],
-				"url": {
-					"raw": "https://hooks.zapier.com/hooks/catch/22670095/2puks8m/",
-					"protocol": "https",
-					"host": [
-						"hooks",
-						"zapier",
-						"com"
+			"name": "Weather Timeline",
+			"item": [
+				{
+					"name": "Rain",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"var moment = require('moment');",
+									"var now = moment.utc();",
+									"",
+									"var startTime = moment.utc(now).add(0, 'minutes');",
+									"var endTime = moment.utc(startTime).add(15, 'minutes');",
+									"var fields = [\"humidity\", \"precipitationProbability\", \"rainIntensity\", \"windDirection\",\"windGust\", \"windSpeed\"];",
+									"var timesteps = [\"current\",\"5m\"];",
+									"var location = [-31.77569, -63.80038]; //Laguna Larga",
+									"var units = \"metric\"",
+									"var timezone = \"UTC\"",
+									"",
+									"pm.environment.set('startTime', startTime.toISOString());",
+									"pm.environment.set('endTime', endTime.toISOString());",
+									"pm.environment.set('fields', fields);",
+									"pm.environment.set('timesteps', timesteps);",
+									"pm.environment.set('location', location);",
+									"pm.environment.set('units', units);",
+									"pm.environment.set('timezone', timezone);",
+									"",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var response = pm.response.json();\r",
+									"pm.environment.set(\"forecast_full_json\", JSON.stringify(response));\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
 					],
-					"path": [
-						"hooks",
-						"catch",
-						"22670095",
-						"2puks8m",
-						""
-					]
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/timelines?location={{location}}&fields={{fields}}&startTime={{startTime}}&endTime={{endTime}}&timesteps={{timesteps}}&units={{units}}&timezone={{timezone}}",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"timelines"
+							],
+							"query": [
+								{
+									"key": "location",
+									"value": "{{location}}",
+									"description": "(Required) ID of a pre-defined location or latlong string"
+								},
+								{
+									"key": "fields",
+									"value": "{{fields}}",
+									"description": "(Required) Selected fields from our data layers (polygon/polyline default to Max, if not suffix is not specified)"
+								},
+								{
+									"key": "startTime",
+									"value": "{{startTime}}",
+									"description": "Start time in ISO 8601 format \"2019-03-20T14:09:50Z\" (defaults to now)"
+								},
+								{
+									"key": "endTime",
+									"value": "{{endTime}}",
+									"description": "End time in ISO 8601 format \"2019-03-20T14:09:50Z\" "
+								},
+								{
+									"key": "timesteps",
+									"value": "{{timesteps}}",
+									"description": "Timesteps of the timelines: \"1m\", \"5m\", \"15m\", \"30m\", \"1h\", \"1d\", and \"current\""
+								},
+								{
+									"key": "units",
+									"value": "{{units}}",
+									"description": "Units of field values, either \"metric\" or \"imperial\" (defaults to metric)"
+								},
+								{
+									"key": "timezone",
+									"value": "{{timezone}}",
+									"description": "Timezone of time values, according to IANA Timezone Names (defaults to UTC)"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SaveResponse",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"forecast_data\": {{forecast_full_json}}\r\n}\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://script.google.com/macros/s/AKfycbyr01BfKf_ooOqBDQ14QlhOI_Mj4rujf0bmkD9wU1YLIqs3zmlh--_lfQ5633fv9aYy/exec",
+							"protocol": "https",
+							"host": [
+								"script",
+								"google",
+								"com"
+							],
+							"path": [
+								"macros",
+								"s",
+								"AKfycbyr01BfKf_ooOqBDQ14QlhOI_Mj4rujf0bmkD9wU1YLIqs3zmlh--_lfQ5633fv9aYy",
+								"exec"
+							]
+						}
+					},
+					"response": []
 				}
+			]
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{apikey}}",
+				"type": "string"
 			},
-			"response": []
+			{
+				"key": "key",
+				"value": "apikey",
+				"type": "string"
+			},
+			{
+				"key": "in",
+				"value": "query",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://api.tomorrow.io/v4"
+		},
+		{
+			"key": "locationId",
+			"value": "6183d156022c1b0008685cc6"
+		},
+		{
+			"key": "apikey",
+			"value": "a1Q2hUkQkUssywKXNlSbgrmFiU2f7Kuj"
 		}
 	]
 }
